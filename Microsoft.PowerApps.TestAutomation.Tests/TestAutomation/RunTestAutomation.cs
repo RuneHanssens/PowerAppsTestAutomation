@@ -15,6 +15,7 @@ namespace Microsoft.PowerApps.TestAutomation.Tests
     [TestClass]
     public class TestAutomation
     {
+        /*
         private static string _username = "Service.User@ordinapowerplatform.onmicrosoft.com";
         private static string _password = "ServiceUser2021!Ordina";
         private static BrowserType _browserType = (BrowserType)Enum.Parse(typeof(BrowserType), "Chrome");
@@ -29,6 +30,22 @@ namespace Microsoft.PowerApps.TestAutomation.Tests
         private static int _globalPassCount = 0;
         private static int _globalFailCount = 0;
         private static int _testMaxWaitTimeInSeconds = 600;
+        */
+
+        private static string _username = "";
+        private static string _password = "";
+        private static BrowserType _browserType;
+        private static Uri _xrmUri;
+        private static Uri _testAutomationUri;
+        private static string _loginMethod;
+        private static string _resultsDirectory = "";
+        private static string _driversPath = "";
+        private static string _usePrivateMode;
+        private static string _testAutomationURLFilePath = "";
+        private static int _globalTestCount = 0;
+        private static int _globalPassCount = 0;
+        private static int _globalFailCount = 0;
+        private static int _testMaxWaitTimeInSeconds = 600;
 
         public TestContext TestContext { get; set; }
 
@@ -38,7 +55,7 @@ namespace Microsoft.PowerApps.TestAutomation.Tests
         public static void Initialize(TestContext TestContext)
         {
             _testContext = TestContext;
-            /*
+            
             _username = _testContext.Properties["OnlineUsername"].ToString();
             _password = _testContext.Properties["OnlinePassword"].ToString();
             _xrmUri = new Uri(_testContext.Properties["OnlineUrl"].ToString());
@@ -49,7 +66,7 @@ namespace Microsoft.PowerApps.TestAutomation.Tests
             _usePrivateMode = _testContext.Properties["UsePrivateMode"].ToString();
             _testAutomationURLFilePath = _testContext.Properties["TestAutomationURLFilePath"].ToString();
             _testMaxWaitTimeInSeconds = Convert.ToInt16(_testContext.Properties["TestMaxWaitTimeInSeconds"]);
-            */
+            
             }
 
         [TestCategory("PowerAppsTestAutomation")]
