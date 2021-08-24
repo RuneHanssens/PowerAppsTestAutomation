@@ -138,7 +138,9 @@ namespace Microsoft.PowerApps.TestAutomation.Api
             // Wait for fullscreen-app-host
             driver.WaitUntilVisible(By.Id("fullscreen-app-host"));
 
-            string sessionId = (string)driver.ExecuteScript("return Core.Telemetry.Log.sessionId");
+            //string sessionId = (string)driver.ExecuteScript("return Core.Telemetry.Log.sessionId");
+            //fix for core.telemetry undefined
+            string sessionId = ((RemoteWebDriver)driver).SessionId.ToString();
 
             return sessionId;
         }
