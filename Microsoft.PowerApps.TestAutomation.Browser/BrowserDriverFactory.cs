@@ -8,6 +8,10 @@ using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.Events;
 using OpenQA.Selenium.Edge;
 using System;
+using WindowsInput;
+using WindowsInput.Native;
+using System.Threading;
+using System.Linq;
 
 namespace Microsoft.PowerApps.TestAutomation.Browser
 {
@@ -23,6 +27,7 @@ namespace Microsoft.PowerApps.TestAutomation.Browser
                     var chromeService = ChromeDriverService.CreateDefaultService(options.DriversPath);
                     chromeService.HideCommandPromptWindow = options.HideDiagnosticWindow;
                     driver = new ChromeDriver(chromeService, options.ToChrome());
+                    BrowserDriverFactory.EnableThirdPartyCookies(driver);
                     break;
                 case BrowserType.Firefox:
                     var ffService = FirefoxDriverService.CreateDefaultService(options.DriversPath);
@@ -53,6 +58,36 @@ namespace Microsoft.PowerApps.TestAutomation.Browser
             }
 
             return driver;
+        }
+
+        private static void EnableThirdPartyCookies(this IWebDriver driver)
+        {
+            var windowHandles = driver.WindowHandles;
+            
+            // Activate Browser window
+            driver.SwitchTo().Window(driver.WindowHandles.Last());
+
+            // Open New Tab Ctrl + T    
+            new InputSimulator().Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_T);
+
+            // Wait for open new tab
+            const int retries = 100;
+            for (var i = 0; i < retries; i++)
+            {
+                Thread.Sleep(100);
+                if (driver.WindowHandles.Count > windowHandles.Count)
+                    break;
+            }
+
+            // Enable Third Party Cookies
+            if (driver.WindowHandles.Count > windowHandles.Count)
+            {
+                driver.Close();
+                driver.SwitchTo().Window(driver.WindowHandles.Last());
+                var selectedCookieControlsToggle = driver.FindElements(By.Id("cookie-controls-toggle"))
+                    .FirstOrDefault(x => x.GetAttribute("checked") != null);
+                selectedCookieControlsToggle?.Click();
+            }
         }
     }
 }
